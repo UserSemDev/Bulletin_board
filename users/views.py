@@ -13,7 +13,7 @@ class UserRegistrationAPIView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            user = serializer.save(is_active=True)
             if user.role == 'admin':
                 user.is_staff = True
                 user.is_superuser = True
