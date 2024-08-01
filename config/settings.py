@@ -177,4 +177,4 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
 
-PASSWORD_RESET_CONFIRM_URL = os.path.join(os.getenv('HOST'), '/{uid}/{token}')
+PASSWORD_RESET_CONFIRM_URL = f"{os.getenv('HOST')}" + "/users/reset_password_confirm/{uid}/{token}/"

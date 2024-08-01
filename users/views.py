@@ -8,20 +8,15 @@ from users.serializers import UserRegistrationSerializer, UserRetrieveSerializer
 
 class UserRegistrationAPIView(generics.CreateAPIView):
     """Эндпоинт создания пользователя"""
+    serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save(is_active=True)
-            if user.role == 'admin':
-                user.is_staff = True
-                user.is_superuser = True
-            user.set_password(user.password)
-            user.save()
-            return response.Response({'detail': 'Пользователь успешно зарегистрирован'},
-                                     status=status.HTTP_201_CREATED)
-        return response.Response(serializer.errors, status=400)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Response({"detail": "Пользователь успешно зарегистрирован!"},
+                                 status=status.HTTP_201_CREATED)
 
 
 class UserUpdateAPIView(generics.UpdateAPIView):
@@ -68,8 +63,8 @@ class UserPasswordResetConfirmAPIView(generics.GenericAPIView):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data={**request.data, **kwargs})
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return response.Response({"detail": "Пароль успешно сброшен."},
+        return response.Response({"detail": "Пароль успешно сброшен!"},
                                  status=status.HTTP_200_OK)
