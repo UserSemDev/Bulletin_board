@@ -28,7 +28,19 @@ factory-boy = "^3.3.0"
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
 python_files = ["tests/*/test_*.py"]
-addopts = "--cov=. --cov-report=term-missing"
+addopts = "--cov=. --cov-report=term-missing --tb=short --cov-config=pyproject.toml"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+    "config/*",
+    "manage.py",
+    "*/__init__.py",
+    "*/migrations/*"
+]
 
 [build-system]
 requires = ["poetry-core"]
