@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   db:
-    image: postgres:13
+    image: postgres:latest
     restart: always
     env_file:
       - .env.docker
@@ -13,7 +11,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}  -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -23,7 +21,6 @@ services:
   api:
     build: .
     tty: true
-    restart: always
     env_file:
       - .env.docker
     environment:
@@ -32,7 +29,6 @@ services:
       - "8000:8000"
     volumes:
       - .:/code
-      - static_volume:/code/static
       - media_volume:/code/media
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     depends_on:
@@ -43,7 +39,6 @@ services:
 
 volumes:
   postgres_data:
-  static_volume:
   media_volume:
 
 networks:
