@@ -24,6 +24,8 @@ pytest = "^8.3.2"
 pytest-django = "^4.8.0"
 pytest-cov = "^5.0.0"
 factory-boy = "^3.3.0"
+flake8 = "^7.1.1"
+flake8-pyproject = "^1.2.3"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
@@ -41,6 +43,10 @@ omit = [
     "*/__init__.py",
     "*/migrations/*"
 ]
+
+[tool.flake8]
+max-line-length = 120
+exclude = ["*/migrations/*"]
 
 [build-system]
 requires = ["poetry-core"]
